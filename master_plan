@@ -1,0 +1,43 @@
+Entity types:
+-Asset
+-Person
+-Organization
+Non-asset entities contain only news history, and assets contain both news history and price history.
+
+update(KG):
+  all_tuples = []
+  for entity in active_entities:
+    
+    articles = eventregistry.query_past_T(entity)
+    articles = filter(articles, if entity in entity_link(article.title)
+
+    for article in articles:
+      KG.update_node(entity, vectorize_title(article.title))
+
+      #optional:
+      disambiguate_relative_pronouns(article.text)
+      
+      entity_link(article.text)
+      tuples = extract_tuples(article.text) 
+      tuples = filter(tuples, if entity == tuple.object || tuple.subject)
+      all_tuples += vectorize_relations(tuples)
+
+  combine_same(all_tuples)
+  for tuple in all_tuples:
+    KG.update_edge(tuple)
+
+  #active_entities contains all assets, "stock market," "nasdaq," "DJIA," etc, and entities that have been mentioned X times 
+  #in the past T seconds. We also cull nodes that were created Y seconds ago but were not mentioned
+  update_active_entities()
+
+So now we have a series of evolving KG per time interval. We can now train a Deep Policy Gradient
+Or whatever is the state of the art policy-based RF algorithm to maximize a transaction-fee adjusted
+Sharpe Ratio reward function. We now have hopefully optimal policy P(KG) that outputs portfolio weights
+Live graph updating and trading API is part 2.
+
+
+1. get articles from 2015 of DJIA 27 assets
+2. entity link, analyze how many entities
+3. generate training data in the same way I will generate future KGs
+4. time bin every 5 minutes st-graph, and link with price data
+5. figure out how to train to retain long-term dependencies
