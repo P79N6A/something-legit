@@ -48,7 +48,7 @@ def query(outfile, params):
         eventFilter = "keepAll",
         startSourceRankPercentile = params["rankStart"], #experiment with this
         endSourceRankPercentile = params["rankEnd"],
-        dataType = ["pr"]) #"news", "pr", "blogs"]
+        dataType = ["news", "pr", "blogs"])
 
     r = ReturnInfo(articleInfo = ArticleInfoFlags(
         bodyLen = -1,
@@ -72,6 +72,7 @@ def query(outfile, params):
         originalArticle = False,
         storyUri = False))
 
+    """
     articles = RequestArticlesInfo(
         page = 1, 
         count = 100, 
@@ -80,16 +81,15 @@ def query(outfile, params):
         returnInfo = r
         )
 
-    """
     uris = RequestArticlesUriWgtList(
         page = 1,
         count = 50000,
         sortBy = "")
-
-    time = RequestArticlesTimeAggr()
     """
 
-    q.setRequestedResult(articles)
+    time = RequestArticlesTimeAggr()
+
+    q.setRequestedResult(time)
 
     results = er.execQuery(q) 
     print(results)
@@ -99,10 +99,21 @@ def query(outfile, params):
 
 #params["keywords", "concepts", "categories", "sources", "rankStart", "rankEnd"] 
 if __name__ == "__main__":
+    assets1 = ["http://en.wikipedia.org/wiki/3M","http://en.wikipedia.org/wiki/American_Express","http://en.wikipedia.org/wiki/Apple_Inc.","http://en.wikipedia.org/wiki/Boeing","http://en.wikipedia.org/wiki/Caterpillar_Inc.","http://en.wikipedia.org/wiki/Chevron_Corporation","http://en.wikipedia.org/wiki/Cisco_Systems","http://en.wikipedia.org/wiki/Coca-Cola","http://en.wikipedia.org/wiki/ExxonMobil","http://en.wikipedia.org/wiki/Goldman_Sachs","http://en.wikipedia.org/wiki/The_Home_Depot","http://en.wikipedia.org/wiki/IBM","http://en.wikipedia.org/wiki/Intel","http://en.wikipedia.org/wiki/Johnson_%26_Johnson"]
+    assets2 = ["http://en.wikipedia.org/wiki/JPMorgan_Chase","http://en.wikipedia.org/wiki/McDonald%27s","http://en.wikipedia.org/wiki/Merck_%26_Co.","http://en.wikipedia.org/wiki/Microsoft","http://en.wikipedia.org/wiki/Nike,_Inc.","http://en.wikipedia.org/wiki/Pfizer","http://en.wikipedia.org/wiki/Procter_%26_Gamble","http://en.wikipedia.org/wiki/The_Travelers_Companies","http://en.wikipedia.org/wiki/UnitedHealth_Group","http://en.wikipedia.org/wiki/United_Technologies","http://en.wikipedia.org/wiki/Verizon_Communications","http://en.wikipedia.org/wiki/Visa_Inc.","http://en.wikipedia.org/wiki/Walmart","http://en.wikipedia.org/wiki/The_Walt_Disney_Company"] 
 
-    query("./data/pr.json", {
+    query("./data/all_time1.json", {
         "keywords": None, 
-        "concepts": QueryItems.OR(["http://en.wikipedia.org/wiki/Apple_Inc.", "http://en.wikipedia.org/wiki/The_Travelers_Companies"]),
+        "concepts": QueryItems.OR(assets1),
+        "categories": None,
+        "sources": None,
+        "rankStart": 0,
+        "rankEnd": 30
+    })   
+    
+    query("./data/all_time2.json", {
+        "keywords": None, 
+        "concepts": QueryItems.OR(assets2),
         "categories": None,
         "sources": None,
         "rankStart": 0,

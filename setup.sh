@@ -1,1 +1,1 @@
-pip install eventregistry
+pip install aylien_news_api
