@@ -1,6 +1,7 @@
 import aylien_news_api
-import pickle
 from aylien_news_api.rest import ApiException
+from pprint import pprint
+import pickle
 import json
 
 # Configure API key authorization: app_id
@@ -54,9 +55,9 @@ DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
     "Lawyer", "MilitaryPerson", "OfficeHolder", "Politician", "Scientist", "Writer", \
     "Meeting", "AcademicConference", "Convention", "Election", "Software"}
 
-CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", \
-    "09000000", "11000000", "13000000"]
+CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", "09000000", "11000000", "13000000"]
 
+#Potentially cut down noise by sentiment polarity
 opts = {
   'categories_taxonomy': "iptc-subjectcode",
   'language': ['en'],
@@ -66,25 +67,51 @@ opts = {
   "categories_id": CATEGORIES_ID,
   'source_rankings_alexa_rank_min': 1,
   'source_rankings_alexa_rank_max': 10000, 
-#  'per_page': 1,
-#  '_return':["id", "title", "body", "summary", "source", "entities", "categories", \
-#      "sentiment", "published_at"]
-  'period': '+10MINUTES',
+  'cursor': '*',
+  'per_page': 100,
+  '_return':["id", "title", "body", "summary", "source", "entities", "categories", "sentiment", "published_at"]
+#  'period': '+10MINUTES',
+#  'field': 'entities.title.type'
 }
 
-#Potentially cut down noise by sentiment polarity
-
+"""
 try:
-    api_response = api_instance.list_time_series(**opts)
-    with open("data/ts1.pyc", "wb") as fp:
+    api_response = api_instance.list_trends(**opts)
+    with open("data/trends_type.pyc", "wb") as fp:
         pickle.dump(api_response, fp)
-    counts = [ts.count for ts in api_response.time_series]
-    print(counts)
-    print(sum(counts))
+#    counts = [ts.count for ts in api_response.time_series]
+#    print(counts)
+#    print(sum(counts))
+    pprint(vars(api_response))
 except ApiException as e:
     print("Exception when calling DefaultApi->list_stories: %sn" % e)
 
-#from pprint import pprint
 #with open("data/aylien_test_article.pyc", "rb") as fp:
 #    res = pickle.load(fp)
 #    pprint(vars(res))
+"""
+
+def fetch_new_stories(params={}):
+  fetched_stories = []
+  stories = None
+
+  while stories is None or len(stories) > 0:
+    try:
+      response = api_instance.list_stories(**params)
+    except ApiException as e:
+      if ( e.status == 429 ):
+        print('Usage limit are exceeded. Wating for 60 seconds...')
+        time.sleep(60)
+        continue
+
+    stories = response.stories
+    params['cursor'] = response.next_page_cursor
+
+    fetched_stories += stories
+    print("Fetched %d stories. Total story count so far: %d" %
+      (len(stories), len(fetched_stories)))
+
+  return fetched_stories
+
+with open("data/seed_stories.pyc", "wb") as fp:
+    pickle.dump(fetch_new_stories(opts), fp)
