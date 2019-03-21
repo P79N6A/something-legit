@@ -11,36 +11,80 @@ aylien_news_api.configuration.api_key['X-AYLIEN-NewsAPI-Application-Key'] = '350
 # create an instance of the API class
 api_instance = aylien_news_api.DefaultApi()
 
-assets = ["http://dbpedia.org/resource/3M","http://dbpedia.org/resource/American_Express","http://dbpedia.org/resource/Apple_Inc.","http://dbpedia.org/resource/Boeing","http://dbpedia.org/resource/Caterpillar_Inc.","http://dbpedia.org/resource/Chevron_Corporation","http://dbpedia.org/resource/Cisco_Systems","http://dbpedia.org/resource/Coca-Cola","http://dbpedia.org/resource/ExxonMobil","http://dbpedia.org/resource/Goldman_Sachs","http://dbpedia.org/resource/The_Home_Depot","http://dbpedia.org/resource/IBM","http://dbpedia.org/resource/Intel","http://dbpedia.org/resource/Johnson_%26_Johnson","http://dbpedia.org/resource/JPMorgan_Chase","http://dbpedia.org/resource/McDonald%27s","http://dbpedia.org/resource/Merck_%26_Co.","http://dbpedia.org/resource/Microsoft","http://dbpedia.org/resource/Nike,_Inc.","http://dbpedia.org/resource/Pfizer","http://dbpedia.org/resource/Procter_%26_Gamble","http://dbpedia.org/resource/The_Travelers_Companies","http://dbpedia.org/resource/UnitedHealth_Group","http://dbpedia.org/resource/United_Technologies","http://dbpedia.org/resource/Verizon_Communications","http://dbpedia.org/resource/Visa_Inc.","http://dbpedia.org/resource/Walmart","http://dbpedia.org/resource/The_Walt_Disney_Company"] 
+ASSETS = ["http://dbpedia.org/resource/3M",\
+        "http://dbpedia.org/resource/American_Express",\
+        "http://dbpedia.org/resource/Apple_Inc.",\
+        "http://dbpedia.org/resource/Boeing",\
+        "http://dbpedia.org/resource/Caterpillar_Inc.",\
+        "http://dbpedia.org/resource/Chevron_Corporation",\
+        "http://dbpedia.org/resource/Cisco_Systems",\
+        "http://dbpedia.org/resource/Coca-Cola",\
+        "http://dbpedia.org/resource/ExxonMobil",\
+        "http://dbpedia.org/resource/Goldman_Sachs",\
+        "http://dbpedia.org/resource/The_Home_Depot",\
+        "http://dbpedia.org/resource/IBM",\
+        "http://dbpedia.org/resource/Intel",\
+        "http://dbpedia.org/resource/Johnson_%26_Johnson",\
+        "http://dbpedia.org/resource/JPMorgan_Chase",\
+        "http://dbpedia.org/resource/McDonald%27s",\
+        "http://dbpedia.org/resource/Merck_%26_Co.",\
+        "http://dbpedia.org/resource/Microsoft",\
+        "http://dbpedia.org/resource/Nike,_Inc.",\
+        "http://dbpedia.org/resource/Pfizer",\
+        "http://dbpedia.org/resource/Procter_%26_Gamble",\
+        "http://dbpedia.org/resource/The_Travelers_Companies",\
+        "http://dbpedia.org/resource/UnitedHealth_Group",\
+        "http://dbpedia.org/resource/United_Technologies",\
+        "http://dbpedia.org/resource/Verizon_Communications",\
+        "http://dbpedia.org/resource/Visa_Inc.",\
+        "http://dbpedia.org/resource/Walmart",\
+        "http://dbpedia.org/resource/The_Walt_Disney_Company",\
+        "http://dbpedia.org/resource/Dow_Jones_Industrial_Average",\
+        "http://dbpedia.org/page/New_York_Stock_Exchange",\
+        "http://dbpedia.org/page/NASDAQ",\
+        "http://dbpedia.org/page/United_States_dollar",\
+        "http://dbpedia.org/page/Economy_of_the_United_States"\
+        ] 
+
+DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
+    "EducationalInstitution", "EmployersOrganisation", "GeopoliticalOrganisation",\
+    "GovernmentAgency", "InternationalOrganisation", "Legislature", "Non-ProfitOrganisation",\
+    "PoliticalParty", "ReligiousOrganisation", "TermOfOffice", "TradeUnion", "Artist", \
+    "Athlete", "BusinessPerson", "Criminal", "Economist", "Engineer", "Journalist", "Judge",\
+    "Lawyer", "MilitaryPerson", "OfficeHolder", "Politician", "Scientist", "Writer", \
+    "Meeting", "AcademicConference", "Convention", "Election", "Software"}
+
+CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", \
+    "09000000", "11000000", "13000000"]
 
 opts = {
   'categories_taxonomy': "iptc-subjectcode",
   'language': ['en'],
   'published_at_start': 'NOW-7DAYS',
   'published_at_end': 'NOW',
+  'entities_title_links_dbpedia': ASSETS,
+  "categories_id": CATEGORIES_ID,
   'source_rankings_alexa_rank_min': 1,
-  'entities_title_links_dbpedia': assets,
   'source_rankings_alexa_rank_max': 10000, 
-  'per_page': 1,
-#  'period': '+10MINUTES',
-  '_return':["id", "title", "body", "summary", "source", "entities", "categories", \
-      "sentiment", "published_at"]
+#  'per_page': 1,
+#  '_return':["id", "title", "body", "summary", "source", "entities", "categories", \
+#      "sentiment", "published_at"]
+  'period': '+10MINUTES',
 }
 
-#Potentially cut down noise by: categories, sentiment polarity, relevance, entity in title
+#Potentially cut down noise by sentiment polarity
 
 try:
-#    api_response = api_instance.list_stories(**opts)
-#    with open("data/aylien_test_article.pyc", "wb") as fp:
-#        pickle.dump(api_response, fp)
-#    counts = [ts.count for ts in api_response.time_series]
-#    print(counts)
-#    print(sum(counts))
-    pass
+    api_response = api_instance.list_time_series(**opts)
+    with open("data/ts1.pyc", "wb") as fp:
+        pickle.dump(api_response, fp)
+    counts = [ts.count for ts in api_response.time_series]
+    print(counts)
+    print(sum(counts))
 except ApiException as e:
     print("Exception when calling DefaultApi->list_stories: %sn" % e)
 
-from pprint import pprint
-with open("data/aylien_test_article.pyc", "rb") as fp:
-    res = pickle.load(fp)
-    pprint(vars(res))
+#from pprint import pprint
+#with open("data/aylien_test_article.pyc", "rb") as fp:
+#    res = pickle.load(fp)
+#    pprint(vars(res))
