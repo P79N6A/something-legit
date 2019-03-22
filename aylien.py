@@ -1,11 +1,15 @@
 from pprint import pprint
 import pickle
 import json
-import constants
+from constants import *
 
 import aylien_news_api
 from aylien_news_api.rest import ApiException
-f
+
+"""
+Bulk dataset fetching from Aylien API
+"""
+
 # Configure API key authorization: app_id
 aylien_news_api.configuration.api_key['X-AYLIEN-NewsAPI-Application-ID'] = '28be1c03'
 # Configure API key authorization: app_key

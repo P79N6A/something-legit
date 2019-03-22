@@ -1,0 +1,80 @@
+update(KG):
+  all_tuples = []
+  for entity in active_entities:
+    
+    articles = eventregistry.query_past_T(entity)
+    articles = filter(articles, if entity in entity_link(article.title)
+
+    for article in articles:
+      KG.update_node(entity, vectorize_title(article.title))
+
+      #optional:
+      disambiguate_relative_pronouns(article.text)
+      
+      entity_link(article.text)
+      tuples = extract_tuples(article.text) 
+      tuples = filter(tuples, if entity == tuple.object || tuple.subject)
+      all_tuples += vectorize_relations(tuples)
+
+  combine_same(all_tuples)
+  for tuple in all_tuples:
+    KG.update_edge(tuple)
+
+  #active_entities contains all assets, "stock market," "nasdaq," "DJIA," etc, and entities that have been mentioned X times 
+  #in the past T seconds. We also cull nodes that were created Y seconds ago but were not mentioned
+  update_active_entities()
+
+So now we have a series of evolving KG per time interval. We can now train a Deep Policy Gradient
+Or whatever is the state of the art policy-based RF algorithm to maximize a transaction-fee adjusted
+Sharpe Ratio reward function. We now have hopefully optimal policy P(KG) that outputs portfolio weights
+Live graph updating and trading API is part 2.
+
+
+1. get articles from 2015 of DJIA 27 assets
+2. entity link, analyze how many entities
+3. generate training data in the same way I will generate future KGs
+4. time bin every 5 minutes st-graph, and link with price data
+5. figure out how to train to retain long-term dependencies
+
+
+
+1. webhose archive search with manual entity filtering
+	-First start with miniature dataset, 1 year from 2018-2019. 
+		-Potentially find mapping between dbpedia entity to keyword search
+			"wikiPageRedirects of" in dbpedia, a set of synonymous terms
+		-Grab all assets of the DJIA by keyword search
+		-Entity link all articles, find set of entities and time range per entity that we need to query based on our graph construction algorithm
+
+2. cityfalcon
+
+JHU SCALE
+Checklist
+Homeworks
+Grade 2110 A4
+
+
+-Find peripheral entities: amount, time introduced, number of mentions. Experiment with how they are found
+	-Function that takes in seed entities for my predefined query for a time range
+	and outputs dictionary of peripheral entities that have number of mentions, time introduced, and longest time between mentions
+	-How to deactivate active nodes
+	-Eventually need to query from aylien start-stop times of these peripheral entities
+	-Construct KG per time interval
+	-Link price per asset node
+	-Train on the spatial KG
+	-Iterate
+	-Do the same for full dataset
+
+
+Aylien
+	-Alexa 1...10000
+		-Entity in title: 2500 per week
+			-5 years and ~3000 entities: 80,000,000 articles
+			-Potential helpful features: sentiment, source rank
+
+How to vectorize relation mentions: In title? In body?
+How to update relations based on a set of relation mentions:
+
+How to vectorize entity mentions: In title? In body?
+How to update entities based on a set of relation mentions:
+
+Remove content after "-" in title, as it's frequently the publishers name

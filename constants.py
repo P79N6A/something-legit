@@ -1,3 +1,5 @@
+import datetime
+
 ASSETS = ["http://dbpedia.org/resource/3M",\
         "http://dbpedia.org/resource/American_Express",\
         "http://dbpedia.org/resource/Apple_Inc.",\
@@ -32,14 +34,18 @@ ASSETS = ["http://dbpedia.org/resource/3M",\
         "http://dbpedia.org/page/United_States_dollar",\
         "http://dbpedia.org/page/Economy_of_the_United_States"\
         ] 
+
 CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", "09000000", "11000000", "13000000"]
-START_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14, tzinfo=tzutc())
-END_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14, tzinfo=tzutc())
+
+START_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14)
+END_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14)
+
 INTERVAL_LENGTH = datetime.timedelta(minutes=10)
+
 DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
     "EducationalInstitution", "EmployersOrganisation", "GeopoliticalOrganisation",\
     "GovernmentAgency", "InternationalOrganisation", "Legislature", "Non-ProfitOrganisation",\
     "PoliticalParty", "ReligiousOrganisation", "TermOfOffice", "TradeUnion", "Artist", \
     "Athlete", "BusinessPerson", "Criminal", "Economist", "Engineer", "Journalist", "Judge",\
     "Lawyer", "MilitaryPerson", "OfficeHolder", "Politician", "Scientist", "Writer", \
-    "Meeting", "AcademicConference", "Convention", "Election", "Software"}
+    "Meeting", "AcademicConference", "Convention", "Election", "Software", "product", "Country"}

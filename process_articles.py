@@ -1,11 +1,12 @@
 from pprint import pprint
 import pickle
 import datetime
+from constants import *
 
 """
-This file analyzes an input unstructured Aylien query of X entities over some time range 
+This file analyzes a news query of X entities over some time range 
     -assigns each article time_bin value, which is based on an interval_length parameter
-    -generates a list of peripheral entities by some heuristic, experimenting with which one
+    -generates a list of peripheral entities by some heuristic; possible heuristics are
         -mentioned in the same sentence as a hot entity
         -mentioned in the same sentence in the summary
         -mentioned in the title
@@ -14,8 +15,7 @@ This file analyzes an input unstructured Aylien query of X entities over some ti
 
 with open("data/seed_stories.pyc", "rb") as fp:
     stories = pickle.load(fp)[::-1]
-pprint(stories[0].published_at)
-pprint(stories[-1].published_at)
+
 class PeripheralEntity:
     def __init__(self, url, types):
         self.mentions = []
@@ -27,4 +27,13 @@ class PeripheralEntity:
 
 class StoryWrapper:
     def __init__(self, story):
-        bin_id = 0
+        self.bin_id = (END_TIME - START_TIME) / INTERVAL_LENGTH
+        self.story = story
+
+    def find_peripheral_sentence():
+        pass
+
+story = vars(stories[850])
+print(story["_body"])
+print(story["_summary"])
+print(story["_title"])
