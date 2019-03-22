@@ -1,6 +1,6 @@
 import datetime
 
-ASSETS = ["http://dbpedia.org/resource/3M",\
+SEED_ASSETS = ["http://dbpedia.org/resource/3M",\
         "http://dbpedia.org/resource/American_Express",\
         "http://dbpedia.org/resource/Apple_Inc.",\
         "http://dbpedia.org/resource/Boeing",\
@@ -38,7 +38,7 @@ ASSETS = ["http://dbpedia.org/resource/3M",\
 CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", "09000000", "11000000", "13000000"]
 
 START_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14)
-END_TIME = datetime.datetime(2019, 3, 14, 4, 40, 14)
+END_TIME = datetime.datetime(2019, 3, 21, 4, 40, 14)
 
 INTERVAL_LENGTH = datetime.timedelta(minutes=10)
 

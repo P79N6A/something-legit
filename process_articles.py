@@ -49,7 +49,7 @@ def get_peripheral_entities(stories):
     #pprint([vars(x) for x in peripheral_entities.values()])
     #print(len(peripheral_entities))
 
-    return peripheral_entities
+    return peripheral_entities.values()
 
 if __name__ == "__main__":
     with open("data/seed_stories.pyc", "rb") as fp:
