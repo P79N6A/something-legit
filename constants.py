@@ -47,5 +47,5 @@ DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
     "GovernmentAgency", "InternationalOrganisation", "Legislature", "Non-ProfitOrganisation",\
     "PoliticalParty", "ReligiousOrganisation", "TermOfOffice", "TradeUnion", "Artist", \
     "Athlete", "BusinessPerson", "Criminal", "Economist", "Engineer", "Journalist", "Judge",\
-    "Lawyer", "MilitaryPerson", "OfficeHolder", "Politician", "Scientist", "Writer", \
-    "Meeting", "AcademicConference", "Convention", "Election", "Software", "product", "Country"}
+    "Lawyer", "OfficeHolder", "Politician", "Scientist", "Writer", \
+    "Meeting", "AcademicConference", "Convention", "Software", "product", "Country"}

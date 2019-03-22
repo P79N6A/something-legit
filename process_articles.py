@@ -12,10 +12,6 @@ This file analyzes a news query of X entities over some time range
         -mentioned in the title
     -calculates number of mentions, statistics on time between mentions, and time introduced.
 """
-
-with open("data/seed_stories.pyc", "rb") as fp:
-    stories = pickle.load(fp)[::-1]
-
 class PeripheralEntity:
     def __init__(self, url, types):
         self.mentions = []
@@ -30,10 +26,39 @@ class StoryWrapper:
         self.bin_id = (END_TIME - START_TIME) / INTERVAL_LENGTH
         self.story = story
 
-    def find_peripheral_sentence():
+    def preprocess_title(story):
+        pass
+    def find_peripheral_title():
         pass
 
-story = vars(stories[850])
-print(story["_body"])
-print(story["_summary"])
-print(story["_title"])
+def get_peripheral_entities(stories):
+    peripheral_entities = {}
+    for story in stories:
+        for entity in story.entities.title:
+            if not any([t in DBPEDIA_TYPES for t in entity.types]):
+                continue
+            if not entity.links or not entity.links.dbpedia:
+                continue
+
+            url = entity.links.dbpedia
+            if url not in peripheral_entities:
+                peripheral_entities[url] = PeripheralEntity(url, entity.types)
+
+            peripheral_entities[url].mentions.append(story.published_at)
+
+    #pprint([vars(x) for x in peripheral_entities.values()])
+    #print(len(peripheral_entities))
+
+    return peripheral_entities
+
+if __name__ == "__main__":
+    with open("data/seed_stories.pyc", "rb") as fp:
+        stories = pickle.load(fp)[::-1]
+
+    story = vars(stories[1008])
+    print(story["_body"])
+    print(story["_summary"])
+    print(story["_title"])
+    for story in stories:
+        if " - " in story.title or "|" in story.title:
+            print (story.title)
