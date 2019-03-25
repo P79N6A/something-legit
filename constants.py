@@ -48,4 +48,6 @@ DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
     "PoliticalParty", "ReligiousOrganisation", "TermOfOffice", "TradeUnion", "Artist", \
     "Athlete", "BusinessPerson", "Criminal", "Economist", "Engineer", "Journalist", "Judge",\
     "Lawyer", "OfficeHolder", "Politician", "Scientist", "Writer", \
-    "Meeting", "AcademicConference", "Convention", "Software", "product", "Country"}
+    "Meeting", "AcademicConference", "Convention", "Software", "product", "Country", "Person"}
+
+DBPEDIA_TYPES_2 = {"Currency", "Company", "GovernmentAgency", "Person", "Country", "product", "Software"}
