@@ -29,10 +29,11 @@ SEED_ASSETS = ["http://dbpedia.org/resource/3M",\
         "http://dbpedia.org/resource/Walmart",\
         "http://dbpedia.org/resource/The_Walt_Disney_Company",\
         "http://dbpedia.org/resource/Dow_Jones_Industrial_Average",\
-        "http://dbpedia.org/page/New_York_Stock_Exchange",\
-        "http://dbpedia.org/page/NASDAQ",\
-        "http://dbpedia.org/page/United_States_dollar",\
-        "http://dbpedia.org/page/Economy_of_the_United_States"\
+        "http://dbpedia.org/resource/New_York_Stock_Exchange",\
+        "http://dbpedia.org/resource/NASDAQ",\
+        "http://dbpedia.org/resource/United_States_dollar",\
+        "http://dbpedia.org/resource/Economy_of_the_United_States",
+        "http://dbpedia.org/resource/Stock_market",
         ] 
 
 CATEGORIES_ID = ["01026002", "02000000", "03000000", "04000000", "09000000", "11000000", "13000000"]
