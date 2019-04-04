@@ -63,17 +63,13 @@ def category_str(types):
     return ""
 
 def q_str(uri):
-    return " OR ".join(["title:\"" + kw + "\"" for kw in query_redirects(uri) + [uri_to_str(uri)]])
+    return " OR ".join(["\"" + kw + "\"" for kw in query_redirects(uri) + [uri_to_str(uri)]])
 
 def dt_to_iso(dt):
     return dt.isoformat() + 'Z'
 
 def dt_to_posix(dt):
     return str(int(dt.timestamp() * 1000))
-
-def print_pickle(filename):
-    with open(filename, "rb") as fp:
-        pprint(vars(pickle.load(fp)))
 
 def save(filename, obj):
     with open(filename, "wb") as fp:
