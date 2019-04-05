@@ -1,11 +1,11 @@
+from constants import *
+
 import pickle
 import time
-import requests
 from pprint import pprint
-from constants import *
+import requests
 import json
 import time
-
 from urllib.parse import unquote
 
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -89,9 +89,17 @@ def spotlight(s):
     }
     headers = {'Accept': 'application/json'}
     r = requests.get(el, params=params, headers=headers)
-    pprint(r.json())
+
+    if r.status_code != 200:
+        return None
+
+    return r.json()
 
 if __name__ == "__main__":
     u1 = "COM, Cisco, Utimaco, Verint, ZTE Corporation Leading the Competition - ResearchAndMarkets.com"
     u2 = "Jack founded ALIBABA in Hangzhou with investments from SoftBank and Goldman"
     u3 = "Walmart's CTO Jeremy King leaves company as e-commerce wars flare - ETtech"
+    u4 =  "Apple launches the iMac 2019 with the fully-kitted version coming in at RM22,779 - Tech News | The Star Online"
+    u5 = "The New York Stock Exchange closed"
+    u6 = "🍬ぴえ〜る♡🍬 (@love_and_pierre) 's Live - TwitCasting"
+    pprint(spotlight(u5))

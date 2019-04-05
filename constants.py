@@ -31,8 +31,8 @@ SEED_ASSETS = ["http://dbpedia.org/resource/Apple_Inc.",\
         "http://dbpedia.org/resource/Dow_Jones_Industrial_Average",\
         "http://dbpedia.org/resource/New_York_Stock_Exchange",\
         "http://dbpedia.org/resource/NASDAQ",\
-        "http://dbpedia.org/resource/United_States_dollar",\
-        "http://dbpedia.org/resource/Economy_of_the_United_States",
+        #"http://dbpedia.org/resource/United_States_dollar",\
+        #"http://dbpedia.org/resource/Economy_of_the_United_States",
         "http://dbpedia.org/resource/Stock_market",
         ] 
 
@@ -52,3 +52,4 @@ DBPEDIA_TYPES = {"Currency", "Employer", "Broadcaster", "Company", \
     "Meeting", "AcademicConference", "Convention", "Software", "product", "Country", "Person"}
 
 DBPEDIA_TYPES_2 = {"Currency", "Company", "GovernmentAgency", "Person", "Country", "product", "Software"}
+DBPEDIA_TYPES_3 = {"DBpedia:Currency", "DBpedia:Company", "DBpedia:GovernmentAgency", "DBpedia:Person", "DBpedia:Country", "DBpedia:Software"}

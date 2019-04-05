@@ -1,80 +1,100 @@
-update(KG):
-  all_tuples = []
-  for entity in active_entities:
-    
-    articles = eventregistry.query_past_T(entity)
-    articles = filter(articles, if entity in entity_link(article.title)
-
-    for article in articles:
-      KG.update_node(entity, vectorize_title(article.title))
-
-      #optional:
-      disambiguate_relative_pronouns(article.text)
-      
-      entity_link(article.text)
-      tuples = extract_tuples(article.text) 
-      tuples = filter(tuples, if entity == tuple.object || tuple.subject)
-      all_tuples += vectorize_relations(tuples)
-
-  combine_same(all_tuples)
-  for tuple in all_tuples:
-    KG.update_edge(tuple)
-
-  #active_entities contains all assets, "stock market," "nasdaq," "DJIA," etc, and entities that have been mentioned X times 
-  #in the past T seconds. We also cull nodes that were created Y seconds ago but were not mentioned
-  update_active_entities()
-
-So now we have a series of evolving KG per time interval. We can now train a Deep Policy Gradient
-Or whatever is the state of the art policy-based RF algorithm to maximize a transaction-fee adjusted
-Sharpe Ratio reward function. We now have hopefully optimal policy P(KG) that outputs portfolio weights
-Live graph updating and trading API is part 2.
-
-
-1. get articles from 2015 of DJIA 27 assets
-2. entity link, analyze how many entities
-3. generate training data in the same way I will generate future KGs
-4. time bin every 5 minutes st-graph, and link with price data
-5. figure out how to train to retain long-term dependencies
-
-
-
-1. webhose archive search with manual entity filtering
-	-First start with miniature dataset, 1 year from 2018-2019. 
-		-Potentially find mapping between dbpedia entity to keyword search
-			"wikiPageRedirects of" in dbpedia, a set of synonymous terms
-		-Grab all assets of the DJIA by keyword search
-		-Entity link all articles, find set of entities and time range per entity that we need to query based on our graph construction algorithm
-
-2. cityfalcon
-
-JHU SCALE
-Checklist
-Homeworks
-Grade 2110 A4
-
-
--Find peripheral entities: amount, time introduced, number of mentions. Experiment with how they are found
-	-Function that takes in seed entities for my predefined query for a time range
-	and outputs dictionary of peripheral entities that have number of mentions, time introduced, and longest time between mentions
-	-How to deactivate active nodes
-	-Eventually need to query from aylien start-stop times of these peripheral entities
-	-Construct KG per time interval
-	-Link price per asset node
-	-Train on the spatial KG
-	-Iterate
-	-Do the same for full dataset
-
+TODO
+-tracking node set selection algorithm
+-query from aylien start-stop times of these peripheral entities
+-Construct KG per time interval
+-Link price per asset node
+-Train/Validate/Test on the spatial KG
+-Do the same for full dataset
 
 Aylien
 	-Alexa 1...10000
-		-Entity in title: 2500 per week
-			-5 years and ~3000 entities: 80,000,000 articles
-			-Potential helpful features: sentiment, source rank
+		Entity in title: 28756 per week (+2500 from seed set). projected for 5 years: 8,126,560.
+		Underestimated: these are only entities (350 entities) discovered in 1 week.
+		Overestimated: these articles queried from beginning to end, when it should be first mentioned to deactivation
+	-Potentially helpful features: sentiment, source rank
 
-How to vectorize relation mentions: In title? In body?
-How to update relations based on a set of relation mentions:
+Cleaning/Proprocessing
+Remove content after " - " or " | " in title, as it's frequently the publishers name
+If ever need to majorly cut down on articles: Don't include countries
 
-How to vectorize entity mentions: In title? In body?
-How to update entities based on a set of relation mentions:
+Anti-type:
+	-Film
+	-TelevisionShow
+	-Fictional Character
+	-Check whether or not dbpedia name is a named entity
+		-'http://dbpedia.org/resource/Chief_technology_officer',
+	False negatives:
+		'http://dbpedia.org/resource/Surface_Pro',
+		'http://dbpedia.org/resource/WhatsApp',
+		'http://dbpedia.org/resource/Ipad_Pro',
+		'http://dbpedia.org/resource/Macbook',
+		'http://dbpedia.org/resource/OnePlus',
+		'http://dbpedia.org/resource/3M',
+		'http://dbpedia.org/resource/Instagram',
+		'http://dbpedia.org/resource/Ripple_(payment_protocol)',
+		'http://dbpedia.org/resource/Spotify',
+		'http://dbpedia.org/resource/Xbox',
+		'http://dbpedia.org/resource/Android_(operating_system)',
+	But 80/100 good filters
 
-Remove content after "-" in title, as it's frequently the publishers name
+
+for seed entity e
+	for e article title
+		if (no other entities)
+			vectorize and submit to e set
+		else 
+			if (other entity is novel)
+				initialize and track node
+	 		vectorize relation and submit to e<->e' set (classify who is object and who is subject, handle >2 entities in title)
+
+	for e article body
+		Find sentences containing e, vectorize and submit to e set
+
+for peripheral entity e
+	for e article title
+		if (no other entities)
+			vectorize and submit to e set
+		else 
+			if (other entity is novel)
+				continue
+			else
+	 			vectorize relation and submit to e<->e' set (classify who is object and who is subject, handle >2 entities in title)
+
+	for e article body
+		Find sentences containing e, vectorize and submit to e set
+
+
+CONSTRUCT GRAPH ALGORITHM FOR INPUT DATA CREATION
+
+graph:
+	-interval_id, {node}, {edge}
+		-Node: (url, last_seed_edge_update_time, mentions = [mentions], <encoded state for learning>, price, type?)
+			-Mention: (sentence, article_id?, vectorize method)
+		-Edge: (source_url, sink_url, mentions = [mentions], <encoded state for learning>, type?)
+
+article:
+	(title, body, NEL annotations, sentiment?, source rank?)
+
+Params: interval length I, inactivity_threshold C, START_DATE, END_DATE
+Initialize graph_state: (N = {seed nodes}, E = {})
+
+Live version
+	-getArticles is an api request
+	-ConstructGraph is called every I minutes with timeframe (Now - I, Now)
+Historical version
+	-getArticles is a historical query of a certain block of articles and a request for non-seed tracked entities
+	-NextGraph is called iteratively (Ii, I(i+1)) for i in range((END_DATE - STARTDATE) / I)
+
+NextGraph(prev_graph g):
+	articles = getArticles(g.tracked_nodes, timeframe)
+
+	(a title must have at least 1 tracked entity, and >= 0 trackable entities)
+	for a in article:
+		preprocess(a)
+		entity_link(a)
+		parse_dependency_graph(a)
+		connect(a, g)
+
+	return g
+
+connect(article_graph, entity_graph):
